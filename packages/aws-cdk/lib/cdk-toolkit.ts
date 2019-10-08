@@ -82,7 +82,7 @@ export class CdkToolkit {
 
     const stacks = await this.appStacks.selectStacks(options.stackNames, {
       extend: options.exclusively ? ExtendedStackSelection.None : ExtendedStackSelection.Upstream,
-      defaultBehavior: DefaultSelection.OnlySingle
+      defaultBehavior: options.allStacks ? DefaultSelection.AllStacks : DefaultSelection.OnlySingle
     });
 
     this.appStacks.processMetadata(stacks);
@@ -301,6 +301,13 @@ export interface DeployOptions {
    * AWS SDK
    */
   sdk: ISDK;
+
+  /**
+   * Whether to deploy all stacks
+   *
+   * @default false
+   */
+  allStacks?: boolean;
 }
 
 export interface DestroyOptions {
