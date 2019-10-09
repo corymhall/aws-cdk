@@ -67,6 +67,13 @@ export interface DockerImageAssetSource {
    * @default - automatically derived from the asset's ID.
    */
   readonly repositoryName?: string;
+
+  /**
+   * Additional Docker tags to add to the image
+   *
+   * @default no additional tags
+   */
+  readonly dockerTags?: string[];
 }
 
 /**

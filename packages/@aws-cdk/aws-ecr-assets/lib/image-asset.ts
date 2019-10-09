@@ -39,6 +39,13 @@ export interface DockerImageAssetProps extends assets.CopyOptions {
    * @default - no target
    */
   readonly target?: string;
+
+  /**
+   * Additional Docker tags to add to the image
+   *
+   * @default no additional tags
+   */
+  readonly dockerTags?: string[];
 }
 
 /**
@@ -97,7 +104,8 @@ export class DockerImageAsset extends Construct implements assets.IAsset {
       dockerBuildArgs: props.buildArgs,
       dockerBuildTarget: props.target,
       repositoryName: props.repositoryName,
-      sourceHash: staging.sourceHash
+      sourceHash: staging.sourceHash,
+      dockerTags: props.dockerTags
     });
 
     // Require that repository adoption happens first, so we route the

@@ -106,6 +106,13 @@ export interface ContainerImageAssetMetadataEntry extends BaseAssetMetadataEntry
    * @default no build target
    */
   readonly target?: string;
+
+  /**
+   * Additional Docker tags to add to the image
+   *
+   * @default no additional tags
+   */
+  readonly dockerTags?: string[];
 }
 
 export type AssetMetadataEntry = FileAssetMetadataEntry | ContainerImageAssetMetadataEntry;

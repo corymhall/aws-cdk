@@ -85,10 +85,30 @@ export async function prepareContainerAsset(assemblyDir: string,
       loggedIn = true;
     }
 
+    if (asset.dockerTags) {
+      for (const t of asset.dockerTags) {
+        print(` Tagging image with additional tag ${t}`);
+        const tagUri =  `${ecr.repositoryUri}:${t}`;
+        const tagCommand = [
+          'docker', 'tag',
+          latest, tagUri
+        ];
+        await shell(tagCommand);
+      }
+    }
+
     // There's no way to make this quiet, so we can't use a PleaseHold. Print a header message.
     print(` ⌛ Pushing Docker image for ${contextPath}; this may take a while.`);
     await shell(['docker', 'push', latest]);
     debug(` 👑  Docker image for ${contextPath} pushed.`);
+    if (asset.dockerTags) {
+      print(` ⌛ Pushing additional Docker tags for Docker image for ${contextPath}; this may take a while.`);
+      for (const t of asset.dockerTags) {
+        const tagUri =  `${ecr.repositoryUri}:${t}`;
+        await shell(['docker', 'push', tagUri]);
+        debug(` 👑  Docker image for ${contextPath} and tag ${t} pushed.`);
+      }
+    }
 
     // Get the (single) repo-digest for latest, which'll be <ecr.repositoryUrl>@sha256:<repoImageSha256>
     const repoDigests = (await shell(['docker', 'image', 'inspect', latest, '--format', '{{range .RepoDigests}}{{.}}|{{end}}'])).trim();
