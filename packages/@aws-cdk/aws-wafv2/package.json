@@ -82,7 +82,9 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@aws-cdk/assert": "1.23.0",
+    "@aws-cdk/aws-iam": "1.23.0",
     "cdk-build-tools": "1.23.0",
+    "cdk-integ-tools": "1.23.0",
     "cfn2ts": "1.23.0",
     "pkglint": "1.23.0"
   },
@@ -90,10 +92,12 @@
     "@aws-cdk/core": "1.23.0"
   },
   "peerDependencies": {
-    "@aws-cdk/core": "1.23.0"
+    "@aws-cdk/core": "1.23.0",
+    "@aws-cdk/aws-iam": "1.23.0"
   },
   "engines": {
     "node": ">= 10.3.0"
   },
   "stability": "experimental"
 }
+
