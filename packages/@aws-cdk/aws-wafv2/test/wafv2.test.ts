@@ -22,35 +22,34 @@ test('Simple wafv2 test', () => {
     VisibilityConfig: {
       SampledRequestsEnabled: true,
       CloudWatchMetricsEnabled: true,
+      MetricName: "MyWafMetric"
     },
-    Rules: {
-      Rules: [
-        {
-          Action: {
-            Block: {}
-          },
-          VisibilityConfig: {
-            SampledRequestsEnabled: true,
-            CloudWatchMetricsEnabled: true,
-          },
-          Statement: {
-            XssMatchStatement: {
-              FieldToMatch: {
-                AllQueryArguments: {}
-              },
-              TextTransformations: {
-                TextTransformations: [
-                  {
-                    Priority: 1,
-                    Type: "NONE"
-                  }
-                ]
+    Rules: [
+      {
+        Name: "BlockXssAttack0",
+        Action: {
+          Block: {}
+        },
+        VisibilityConfig: {
+          SampledRequestsEnabled: true,
+          CloudWatchMetricsEnabled: true,
+          MetricName: "BlockXssAttackMetric0"
+        },
+        Statement: {
+          XssMatchStatement: {
+            FieldToMatch: {
+              AllQueryArguments: {}
+            },
+            TextTransformations: [
+              {
+                Priority: 1,
+                Type: "NONE"
               }
-            }
+            ]
           }
         }
-      ]
-    }
+      }
+    ]
   }));
 
 });
@@ -79,34 +78,31 @@ test('Simple wafv2 test, visibility disabled', () => {
       SampledRequestsEnabled: false,
       CloudWatchMetricsEnabled: false,
     },
-    Rules: {
-      Rules: [
-        {
-          Action: {
-            Block: {}
-          },
-          VisibilityConfig: {
-            SampledRequestsEnabled: false,
-            CloudWatchMetricsEnabled: false,
-          },
-          Statement: {
-            XssMatchStatement: {
-              FieldToMatch: {
-                AllQueryArguments: {}
-              },
-              TextTransformations: {
-                TextTransformations: [
-                  {
-                    Priority: 1,
-                    Type: "NONE"
-                  }
-                ]
+    Rules: [
+      {
+        Name: "BlockXssAttack0",
+        Action: {
+          Block: {}
+        },
+        VisibilityConfig: {
+          SampledRequestsEnabled: false,
+          CloudWatchMetricsEnabled: false,
+        },
+        Statement: {
+          XssMatchStatement: {
+            FieldToMatch: {
+              AllQueryArguments: {}
+            },
+            TextTransformations: [
+              {
+                Priority: 1,
+                Type: "NONE"
               }
-            }
+            ]
           }
         }
-      ]
-    }
+      }
+    ]
   }));
 
 });
@@ -139,59 +135,58 @@ test('wafv2 test with multiple rules', () => {
     VisibilityConfig: {
       SampledRequestsEnabled: true,
       CloudWatchMetricsEnabled: true,
+      MetricName: "MyWafMetric"
     },
-    Rules: {
-      Rules: [
-        {
-          Action: {
-            Block: {}
-          },
-          VisibilityConfig: {
-            SampledRequestsEnabled: true,
-            CloudWatchMetricsEnabled: true,
-          },
-          Statement: {
-            XssMatchStatement: {
-              FieldToMatch: {
-                AllQueryArguments: {}
-              },
-              TextTransformations: {
-                TextTransformations: [
-                  {
-                    Priority: 1,
-                    Type: "NONE"
-                  }
-                ]
-              }
-            }
-          }
+    Rules: [
+      {
+        Name: "BlockXssAttack0",
+        Action: {
+          Block: {}
         },
-        {
-          Action: {
-            Block: {}
-          },
-          VisibilityConfig: {
-            SampledRequestsEnabled: true,
-            CloudWatchMetricsEnabled: true,
-          },
-          Statement: {
-            XssMatchStatement: {
-              FieldToMatch: {
-                Body: {}
-              },
-              TextTransformations: {
-                TextTransformations: [
-                  {
-                    Priority: 1,
-                    Type: "NONE"
-                  }
-                ]
+        VisibilityConfig: {
+          SampledRequestsEnabled: true,
+          CloudWatchMetricsEnabled: true,
+          MetricName: "BlockXssAttackMetric0"
+        },
+        Statement: {
+          XssMatchStatement: {
+            FieldToMatch: {
+              AllQueryArguments: {}
+            },
+            TextTransformations: [
+              {
+                Priority: 1,
+                Type: "NONE"
               }
-            }
+            ]
           }
         }
-      ]
-    }
+      },
+      {
+        Name: "BlockXssAttack1",
+        Action: {
+          Block: {}
+        },
+        VisibilityConfig: {
+          SampledRequestsEnabled: true,
+          CloudWatchMetricsEnabled: true,
+          MetricName: "BlockXssAttackMetric1"
+        },
+        Statement: {
+          XssMatchStatement: {
+            FieldToMatch: {
+              Body: {}
+            },
+            TextTransformations: [
+              {
+                Priority: 1,
+                Type: "NONE"
+              }
+            ]
+          }
+        }
+      }
+    ]
   }));
 
 });

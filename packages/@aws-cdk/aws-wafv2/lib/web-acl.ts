@@ -9,7 +9,7 @@ export abstract class Visibility {
   /**
    * Update
    */
-  public static enable(metricName?: string, sample?: boolean): Visibility {
+  public static enable(metricName: string, sample?: boolean): Visibility {
     return new EnableVisibility({
       cloudWatchMetricsEnabled: true,
       sampledRequestsEnabled: sample ?? true,
@@ -85,7 +85,6 @@ export interface VisibilityConfig {
 
   /**
    * Update
-   *
    * @default
    */
   readonly metricName?: string;
@@ -116,7 +115,7 @@ export interface WebAclProps {
 
   /**
    * Update
-   * @default - automatically generated
+   * @default
    */
   readonly webAclName?: string;
 
@@ -127,6 +126,7 @@ export interface WebAclProps {
 
   /**
    * Update
+   * @default
    */
   readonly visibility?: Visibility;
 }
@@ -159,7 +159,7 @@ export class WebAcl extends Resource {
       physicalName: props.webAclName
     });
 
-    const visibility = props.visibility ?? Visibility.enable();
+    const visibility = props.visibility ?? Visibility.enable(this.node.id + 'Metric');
 
     const defaultAction = generateDefaultAction(props.defaultAction);
     const visibilityConfig = visibility.bind(this, this);
@@ -167,9 +167,8 @@ export class WebAcl extends Resource {
     const webAcl = new CfnWebACL(this, 'WebAcl', {
       name: this.physicalName,
       defaultAction,
-      rules: {
-        rules: props.rules.map(rule => {
-          const ruleConfig = rule.bind(this, this);
+      rules: props.rules.map((rule, index) => {
+          const ruleConfig = rule.bind(this, this, index);
           return {
             action: ruleConfig.action,
             name: ruleConfig.ruleName,
@@ -178,8 +177,7 @@ export class WebAcl extends Resource {
             statement: ruleConfig.statement.config,
             visibilityConfig: ruleConfig.visibilityConfig
           };
-        })
-      },
+        }),
       scope: Scope.REGIONAL,
       visibilityConfig
     });

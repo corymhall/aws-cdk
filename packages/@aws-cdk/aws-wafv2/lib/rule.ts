@@ -107,7 +107,7 @@ export abstract class Rule {
   /**
    * Update
    */
-  public abstract bind(scope: Construct, webAcl: WebAcl): RuleConfig;
+  public abstract bind(scope: Construct, webAcl: WebAcl, priority?: number): RuleConfig;
 }
 
 /**
@@ -121,19 +121,23 @@ class BlockXssAttack extends Rule {
   /**
    * Update
    */
-  public bind(scope: Construct, webAcl: WebAcl): RuleConfig {
+  public bind(scope: Construct, webAcl: WebAcl, priority?: number): RuleConfig {
+    const finalPriority = this.options && this.options.priority ? this.options.priority : priority;
+    const finalRuleName = this.options && this.options.ruleName ? this.options.ruleName : 'BlockXssAttack' + finalPriority;
+
     const statementConfig = Statements.xssMatchStatement(this.props).bind(scope, webAcl);
     const visibility = this.options && this.options.visibility !== undefined ?
       this.options.visibility :
-      Visibility.enable();
+      Visibility.enable('BlockXssAttackMetric' + finalPriority);
 
     return {
       action: {
         block: {}
       },
-      ruleName: this.options !== undefined ? this.options.ruleName : undefined,
+      ruleName: finalRuleName,
       statement: statementConfig,
       visibilityConfig: visibility.bind(scope, webAcl),
+      priority: finalPriority,
       ...this.options
     };
   }

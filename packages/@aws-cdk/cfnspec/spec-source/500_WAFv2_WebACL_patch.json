@@ -1,0 +1,25 @@
+{
+  "ResourceTypes": {
+    "AWS::WAFv2::WebACL": {
+      "patch": {
+        "description": "https://github.com/aws/aws-cdk/issues/6056",
+        "operations": [
+          {
+            "op": "remove",
+            "path": "/Properties/Rules/PrimitiveType"
+          },
+          {
+            "op": "replace",
+            "path": "/Properties/Rules/Type",
+            "value": "List"
+          },
+          {
+            "op": "add",
+            "path": "/Properties/Rules/ItemType",
+            "value": "Rule"
+          }
+        ]
+      }
+    }
+  }
+}
