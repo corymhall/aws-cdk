@@ -8,10 +8,10 @@ test('Simple wafv2 test', () => {
   new wafv2.WebAcl(stack, 'MyWaf', {
     rules: [wafv2.Rule.blockXss({
       fieldToMatch: wafv2.FieldToMatch.ALL_QUERY_ARGUMENTS,
-      textTransformations: {
+      textTransformations: [{
         type: wafv2.TextTransformationType.NONE,
         priority: 1
-      }
+      }]
     })]
   });
 
@@ -59,10 +59,10 @@ test('Simple wafv2 test, visibility disabled', () => {
   new wafv2.WebAcl(stack, 'MyWaf', {
     rules: [wafv2.Rule.blockXss({
       fieldToMatch: wafv2.FieldToMatch.ALL_QUERY_ARGUMENTS,
-      textTransformations: {
+      textTransformations: [{
         type: wafv2.TextTransformationType.NONE,
         priority: 1
-      }
+      }]
     },
     {
       visibility: wafv2.Visibility.disable()
@@ -113,17 +113,21 @@ test('wafv2 test with multiple rules', () => {
     rules: [
       wafv2.Rule.blockXss({
         fieldToMatch: wafv2.FieldToMatch.ALL_QUERY_ARGUMENTS,
-        textTransformations: {
+        textTransformations: [{
           type: wafv2.TextTransformationType.NONE,
           priority: 1
-        }
+        }]
       }),
       wafv2.Rule.blockXss({
         fieldToMatch: wafv2.FieldToMatch.BODY,
-        textTransformations: {
-          type: wafv2.TextTransformationType.NONE,
-          priority: 1
-        }
+        textTransformations: [
+          {
+            type: wafv2.TextTransformationType.NONE,
+          },
+          {
+            type: wafv2.TextTransformationType.LOWERCASE,
+          }
+        ]
       })
     ]
   });
@@ -179,8 +183,12 @@ test('wafv2 test with multiple rules', () => {
             },
             TextTransformations: [
               {
-                Priority: 1,
+                Priority: 0,
                 Type: "NONE"
+              },
+              {
+                Priority: 1,
+                Type: "LOWERCASE"
               }
             ]
           }

@@ -24,12 +24,12 @@ export class XssMatchStatement extends Statement {
       return {
         config: {
           xssMatchStatement: {
-            textTransformations: this.props.textTransformations === undefined ? {} : {
-              textTransformations: [{
-                priority: this.props.textTransformations.priority,
-                type: this.props.textTransformations.type
-              }]
-            },
+            textTransformations: this.props.textTransformations === undefined ? [] : this.props.textTransformations.map((text, index) => {
+              return {
+                priority: text.priority ?? index,
+                type: text.type
+              };
+            }),
             fieldToMatch: returnFieldToMatchValue(this.props.fieldToMatch, this.props.fieldToMatchValue)
           }
         }

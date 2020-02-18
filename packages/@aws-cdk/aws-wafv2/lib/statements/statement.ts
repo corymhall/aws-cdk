@@ -108,7 +108,7 @@ export interface BaseMatchStatementProps {
    * Update
    * @default
    */
-  readonly textTransformations?: TextTransformation;
+  readonly textTransformations?: TextTransformation[];
 
   /**
    * Update

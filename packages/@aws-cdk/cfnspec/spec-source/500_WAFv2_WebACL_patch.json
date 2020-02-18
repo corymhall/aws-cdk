@@ -21,5 +21,24 @@
         ]
       }
     }
+  },
+  "PropertyTypes": {
+    "AWS::WAFv2::WebACL.XssMatchStatement": {
+      "patch": {
+        "description": "https://github.com/aws/aws-cdk/issues/6056",
+        "operations": [
+          {
+            "op": "replace",
+            "path": "/Properties/TextTransformations/Type",
+            "value": "List"
+          },
+          {
+            "op": "add",
+            "path": "/Properties/TextTransformations/ItemType",
+            "value": "TextTransformation"
+          }
+        ]
+      }
+    }
   }
 }
