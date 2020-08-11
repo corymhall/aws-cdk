@@ -65,6 +65,37 @@ export class CloudExecutable {
     while (true) {
       const assembly = await this.props.synthesizer(this.props.sdkProvider, this.props.configuration);
 
+      for (let key in assembly.artifacts) {
+        if (key === 'NestedCloudAssemblyArtifact') {
+          const nestedAssembly = assembly.artifacts[key].assembly;
+          if (nestedAssembly.manifest.missing) {
+            const missingKeys = missingContextKeys(nestedAssembly.manifest.missing);
+            let tryLookup = true;
+            if (previouslyMissingKeys && setsEqual(missingKeys, previouslyMissingKeys)) {
+              debug('Not making progress trying to resolve environmental context. Giving up.');
+              tryLookup = false;
+            }
+
+            previouslyMissingKeys = missingKeys;
+
+            if (tryLookup) {
+              debug('Some context information is missing. Fetching...');
+
+              await contextproviders.provideContextValues(nestedAssembly.manifest.missing, this.props.configuration.context, this.props.sdkProvider);
+
+              // Cache the new context to disk
+              await this.props.configuration.saveContext();
+
+              // Execute again
+              continue;
+            }
+
+          }
+
+        }
+
+      }
+
       if (assembly.manifest.missing) {
         const missingKeys = missingContextKeys(assembly.manifest.missing);
 
